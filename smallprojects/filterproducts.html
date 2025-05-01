@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Filter</title>
+  <style>
+    img {
+      height: 300px;
+      width: 250px;
+    }
+
+    #cont {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .product {
+      height: 500px;
+      width: 350px;
+      border: 1px solid black;
+      padding: 5px;
+      border-radius: 5px;
+      box-shadow: 5px 5px 5px lightpink;
+      margin: 5px;
+    }.btn{
+      
+     padding: 12px 7px;
+      font-size: 10px;
+      color: antiquewhite;
+      background-color: orangered;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Filter Products</h2>
+  <input type="text" id="searchInput" placeholder="Search by name" oninput="filterData()"><br><br>
+
+  <!-- Brand checkboxes -->
+  <label><input type="checkbox" class="brand" value="jio" onchange="filterData()"> Jio</label>
+  <label><input type="checkbox" class="brand" value="redmi" onchange="filterData()"> Redmi</label>
+  <label><input type="checkbox" class="brand" value="iq" onchange="filterData()"> iQ</label>
+  <label><input type="checkbox" class="brand" value="iphone" onchange="filterData()"> iPhone</label>
+  <label><input type="checkbox" class="brand" value="micromax" onchange="filterData()"> Micromax</label>
+  <label><input type="checkbox" class="brand" value="nokia" onchange="filterData()"> Nokia</label>
+  <label><input type="checkbox" class="brand" value="oppo" onchange="filterData()"> Oppo</label>
+  <label><input type="checkbox" class="brand" value="vivo" onchange="filterData()"> Vivo</label>
+
+  <div id="cont"></div>
+
+  <script>
+    const products = [
+      { name: "Jio Phone Next", brand: "jio", image: "./assest/images/jio.webp" },
+      { name: "Redmi Note 10", brand: "redmi", image: "./assest/images/redmi.jpg" },
+      { name: "iQOO Z7", brand: "iq", image: "./assest/images/iq.webp" },
+      { name: "iPhone 13", brand: "iphone", image: "./assest/images/iphone.jpg" },
+      { name: "Micromax In Note", brand: "micromax", image: "./assest/images/micromax.jpg" },
+      { name: "Nokia G21", brand: "nokia", image: "./assest/images/nokia.jpg" },
+      { name: "Oppo A76", brand: "oppo", image: "./assest/images/oopo.webp" },
+      { name: "Vivo Y15", brand: "vivo", image: "./assest/images/vivo.webp" }
+    ];
+
+    function displayProducts(filteredProducts) {
+      const container = document.getElementById("cont");
+      container.innerHTML = "";
+
+      if (filteredProducts.length === 0) {
+        container.innerHTML = "<p>No products found.</p>";
+        return;
+      }
+
+      filteredProducts.forEach(product => {
+        const div = document.createElement("div");
+        div.className = "product";
+        div.innerHTML = `
+          <img src="${product.image}" alt="${product.name}">
+          <h3>${product.name}</h3>
+          <p>Brand: ${product.brand}</p>
+          <button class="btn" onclick="alert('Added to cart')">Add to Cart</button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function filterData() {
+      const searchValue = document.getElementById("searchInput").value.toLowerCase();
+      const checkedBrands = Array.from(document.querySelectorAll(".brand:checked")).map(cb => cb.value);
+
+      const filtered = products.filter(product => {
+        const matchesSearch = product.name.toLowerCase().includes(searchValue);
+        const matchesBrand = checkedBrands.length === 0 || checkedBrands.includes(product.brand);
+        return matchesSearch && matchesBrand;
+      });
+
+      displayProducts(filtered);
+    }
+
+    // Initial load
+    displayProducts(products);
+  </script>
+
+</body>
+</html>
