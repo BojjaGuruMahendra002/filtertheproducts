@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Fetch API Example</title>
+</head>
+<body>
+	<h1>Fetch API Example</h1>
+	<div id="data"></div>
+
+	
+	
+		<script>
+	// Replace with your food recipe API URL
+	const recipeApiUrl = 'https://www.themealdb.com/api/json/v1/1/search.php?s=chicken';
+	console.log(recipeApiUrl);
+
+	fetch(recipeApiUrl)
+		.then(response => {
+			if (!response.ok) {
+				throw new Error('Network response was not ok ' + response.statusText);
+			}
+			return response.json();
+		})
+		.then(data => {
+			const dataContainer = document.getElementById('data');
+			data.meals.forEach(meal => {
+				const div = document.createElement('div');
+				div.innerHTML = `
+				<div class="meal-card" style="border: 1px solid #ccc; padding: 10px; margin: 10px;">
+					<h3>${meal.strMeal}</h3>
+					<img src="${meal.strMealThumb}" alt="${meal.strMeal}" style="width:200px;">
+					<p>${meal.strInstructions}</p>
+					<p>${meal.price}</p>
+					<button onclick="window.location.href='${meal.strYoutube}'">Watch Video</button>
+					</div>
+				
+				`;
+				dataContainer.appendChild(div);
+			});
+		})
+		.catch(error => {
+			console.error('There was a problem with the fetch operation:', error);
+		});
+</script>
+</body>
+</html>
